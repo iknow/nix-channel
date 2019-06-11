@@ -7,5 +7,6 @@
     ./kibana.nix
     ./lorri.nix
     ./memcached.nix
+    ./mysql.nix
   ];
 }
