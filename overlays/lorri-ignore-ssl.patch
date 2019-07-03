@@ -1,14 +1,14 @@
 diff --git a/src/ops/direnv/envrc.bash b/src/ops/direnv/envrc.bash
-index cc0d44f..ffbef48 100644
+index f6c0084..df295b9 100644
 --- a/src/ops/direnv/envrc.bash
 +++ b/src/ops/direnv/envrc.bash
-@@ -53,6 +53,9 @@ function declare() {
+@@ -120,6 +120,9 @@ function declare() {
          # vars from: https://github.com/NixOS/nix/blob/92d08c02c84be34ec0df56ed718526c382845d1a/src/nix-build/nix-build.cc#L421
          "NIX_ENFORCE_PURITY="*) punt;;
  
 +        "NIX_SSL_CERT_FILE="*) punt;;
 +        "SSL_CERT_FILE="*) punt;;
 +
-         *)
-             export "$@"
-             ;;
+         *) varmap "$@" ;;
+     esac
+ }
