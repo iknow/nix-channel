@@ -4,40 +4,29 @@ with lib;
 
 let
   lorri = pkgs.lorri;
-  cfg   = config.services.lorri;
+in
+{
+  options = {
+    services.lorri = {
+      enable = mkEnableOption "enable Lorri daemon";
+    };
+  };
 
-  mkService = path: (
-    let
-      name = (baseNameOf path);
-    in
-    {
-      "lorri-${name}" = {
+  config = mkIf config.services.lorri.enable {
+    environment.systemPackages = [ lorri ];
+    launchd.user.agents = {
+      "lorri-daemon" = {
         serviceConfig = {
-          WorkingDirectory = path;
+          WorkingDirectory = (builtins.getEnv "HOME");
           EnvironmentVariables = { };
           KeepAlive = true;
           RunAtLoad = true;
         };
         script = ''
           source ${config.system.build.setEnvironment}
-          exec ${lorri}/bin/lorri watch
+          exec ${lorri}/bin/lorri daemon
         '';
       };
-    });
-in
-{
-  options = {
-    services.lorri = {
-      paths = mkOption {
-        description = "Paths to watch.";
-        default = [];
-        type = types.listOf types.str;
-      };
     };
-  };
-
-  config = mkIf (cfg.paths != []) {
-    environment.systemPackages = [ lorri ];
-    launchd.user.agents = mkMerge (map mkService cfg.paths);
   };
 }
