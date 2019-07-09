@@ -11,4 +11,6 @@ self: super: {
   });
 
   phraseapp_updater = super.callPackage ./phraseapp_updater {};
+
+  neovim-nightly = super.callPackage ./neovim-nightly.nix {};
 }
