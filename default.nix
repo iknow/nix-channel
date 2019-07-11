@@ -1,4 +1,13 @@
-{ nixpkgs ? import <nixpkgs> {} }:
+let
+  packagesWithOverlay = import <nixpkgs> {
+    overlays = [ (import ./overlays/packages.nix) ];
+  };
+in
 {
-  darwin-modules = import ./darwin-modules;
+  inherit (packagesWithOverlay)
+    branch-server-ssh
+    lorri
+    phraseapp_updater
+    neovim-nightly
+    ;
 }

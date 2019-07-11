@@ -1,4 +1,6 @@
 self: super: {
+  branch-server-ssh = super.callPackage ./branch-server-ssh {};
+
   lorri = let
     src = builtins.fetchGit {
       url = "https://github.com/target/lorri";
