@@ -7,7 +7,7 @@ GEM
     oj (2.18.5)
     parallel (1.17.0)
     phraseapp-ruby (1.6.0)
-    phraseapp_updater (2.0.10)
+    phraseapp_updater (2.1.0)
       deep_merge (~> 1.1)
       hashdiff (~> 0.3)
       multi_json (~> 1.12)
