@@ -1,4 +1,4 @@
 { config, lib, pkgs, ... }:
 {
-  nixpkgs.overlays = [ (import ../overlays/packages.nix) ];
+  nixpkgs.overlays = [ (import ../overlays) ];
 }
