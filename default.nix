@@ -1,6 +1,6 @@
 let
   packagesWithOverlay = import <nixpkgs> {
-    overlays = [ (import ./overlays/packages.nix) ];
+    overlays = [ (import ./overlays) ];
   };
 in
 {
@@ -9,5 +9,6 @@ in
     lorri
     phraseapp_updater
     neovim-nightly
+    branchctl
     ;
 }
