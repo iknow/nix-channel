@@ -18,12 +18,14 @@
     version = "0.4.0";
   };
   multi_json = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rl0qy4inf1mp8mybfk56dfga0mvx97zwpmq5xmiwl5r770171nv";
+      sha256 = "0xy54mjf7xg41l8qrg1bqri75agdqmxap9z466fjismc1rn2jwfr";
       type = "gem";
     };
-    version = "1.13.1";
+    version = "1.14.1";
   };
   oj = {
     source = {
@@ -38,10 +40,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1x1gzgjrdlkm1aw0hfpyphsxcx90qgs3y4gmp9km3dvf4hc4qm8r";
+      sha256 = "17b127xxmm2yqdz146qwbs57046kn0js1h8synv01dwqz2z1kp2l";
       type = "gem";
     };
-    version = "1.17.0";
+    version = "1.19.2";
   };
   phraseapp-ruby = {
     source = {
@@ -57,10 +59,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1c2dprif8l8a7gppf6494sp3rza8ipshkhszhgxd37j0380vv8kp";
+      sha256 = "1rz5m4jycqkh2s2ins53shc1k06xq8gj5d0vin9s8kdg82kan2d2";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.1.1";
   };
   thor = {
     source = {
