@@ -181,7 +181,7 @@ in {
         rm -f "${configDir}/logging.yml"
         cp -f ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
         mkdir -p ${configDir}/scripts
-        ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+        ${optionalString es6 "cp -f ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
 
