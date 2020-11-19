@@ -5,7 +5,6 @@ let
 in
 {
   inherit (packagesWithOverlay)
-    branch-server-ssh
     phraseapp_updater
     neovim-nightly
     branchctl
