@@ -6,6 +6,7 @@ in
 {
   inherit (packagesWithOverlay)
     phraseapp_updater
+    kustomize-static
     neovim-nightly
     branchctl
     ;
