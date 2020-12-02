@@ -30,10 +30,11 @@ buildGoModule rec {
   patches = [
     # this patch is needed otherwise other patches won't take effect
     ./unpin-versions.patch
-    ./go-getter-full-repo.patch
+    ./go-getter-http-only.patch
+    ./single-fetch.patch
   ];
 
   modRoot = "kustomize";
 
-  vendorSha256 = "08wpzgyrc3ag3cnj0mza7zv91p574dyhr80g1z9i9nqrr0p1cvf5";
+  vendorSha256 = "1mz9bx2fjm3mlybily2pzgir746by69qxg1gpwsdi45i99hcbaj4";
 }
