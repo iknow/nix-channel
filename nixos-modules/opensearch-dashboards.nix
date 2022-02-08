@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.opensearch-dashboards;
+  opt = options.services.opensearch-dashboards;
 
   cfgFile = pkgs.writeText "opensearch-dashboards.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null) ({
+    (filterAttrsRecursive (n: v: v != null && v != []) ({
       server.host = cfg.listenAddress;
       server.port = cfg.port;
       server.ssl.certificate = cfg.cert;
@@ -15,19 +16,19 @@ let
       opensearchDashboards.index = cfg.index;
       opensearchDashboards.defaultAppId = cfg.defaultAppId;
 
-      opensearch.hosts = cfg.opensearch.hosts;
-      opensearch.username = cfg.opensearch.username;
-      opensearch.password = cfg.opensearch.password;
+      elasticsearch.hosts = cfg.elasticsearch.hosts;
+      elasticsearch.username = cfg.elasticsearch.username;
+      elasticsearch.password = cfg.elasticsearch.password;
 
-      opensearch.ssl.certificate = cfg.opensearch.cert;
-      opensearch.ssl.key = cfg.opensearch.key;
-      opensearch.ssl.certificateAuthorities = cfg.opensearch.certificateAuthorities;
+      elasticsearch.ssl.certificate = cfg.elasticsearch.cert;
+      elasticsearch.ssl.key = cfg.elasticsearch.key;
+      elasticsearch.ssl.certificateAuthorities = cfg.elasticsearch.certificateAuthorities;
     } // cfg.extraConf)
   )));
 
 in {
   options.services.opensearch-dashboards = {
-    enable = mkEnableOption "enable opensearch-dashboards service";
+    enable = mkEnableOption "opensearch-dashboards service";
 
     listenAddress = mkOption {
       description = "Opensearch-Dashboards listening host";
@@ -54,21 +55,21 @@ in {
     };
 
     index = mkOption {
-      description = "Opensearch index to use for saving opensearch-dashboards config.";
+      description = "Elasticsearch index to use for saving opensearch-dashboards config.";
       default = ".opensearch_dashboards";
       type = types.str;
     };
 
     defaultAppId = mkOption {
-      description = "Opensearch default application id.";
+      description = "Elasticsearch default application id.";
       default = "discover";
       type = types.str;
     };
 
-    opensearch = {
+    elasticsearch = {
       hosts = mkOption {
         description = ''
-          The URLs of the Opensearch instances to use for all your queries.
+          The URLs of the Elasticsearch instances to use for all your queries.
           All nodes listed here must be on the same cluster.
 
           Defaults to <literal>[ "http://localhost:9200" ]</literal>.
@@ -78,33 +79,33 @@ in {
       };
 
       username = mkOption {
-        description = "Username for opensearch basic auth.";
+        description = "Username for elasticsearch basic auth.";
         default = null;
         type = types.nullOr types.str;
       };
 
       password = mkOption {
-        description = "Password for opensearch basic auth.";
+        description = "Password for elasticsearch basic auth.";
         default = null;
         type = types.nullOr types.str;
       };
 
       certificateAuthorities = mkOption {
         description = ''
-          CA files to auth against opensearch.
+          CA files to auth against elasticsearch.
         '';
         default = [];
         type = types.listOf types.path;
       };
 
       cert = mkOption {
-        description = "Certificate file to auth against opensearch.";
+        description = "Certificate file to auth against elasticsearch.";
         default = null;
         type = types.nullOr types.path;
       };
 
       key = mkOption {
-        description = "Key file to auth against opensearch.";
+        description = "Key file to auth against elasticsearch.";
         default = null;
         type = types.nullOr types.path;
       };
@@ -113,8 +114,7 @@ in {
     package = mkOption {
       description = "Opensearch-Dashboards package to use";
       default = pkgs.opensearch-dashboards;
-      defaultText = "pkgs.opensearch-dashboards";
-      example = "pkgs.opensearch-dashboards5";
+      defaultText = literalExpression "pkgs.opensearch-dashboards";
       type = types.package;
     };
 
@@ -132,23 +132,30 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    assertions = [
-    ];
-
-    launchd.user.agents.opensearch-dashboards = {
+    systemd.services.opensearch-dashboards = {
+      description = "Opensearch-Dashboards Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" "elasticsearch.service" ];
+      environment = { BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json"; };
       serviceConfig = {
-        EnvironmentVariables = {
-          BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json";
-        };
-        KeepAlive = true;
-        RunAtLoad = true;
+        ExecStart =
+          "${cfg.package}/bin/opensearch-dashboards" +
+          " --config ${cfgFile}" +
+          " --path.data ${cfg.dataDir}";
+        User = "opensearch-dashboards";
+        WorkingDirectory = cfg.dataDir;
       };
-
-      script = ''
-        exec ${cfg.package}/bin/opensearch-dashboards --config ${cfgFile} --path.data ${cfg.dataDir}
-      '';
     };
 
     environment.systemPackages = [ cfg.package ];
+
+    users.users.opensearch-dashboards = {
+      isSystemUser = true;
+      description = "Opensearch-Dashboards service user";
+      home = cfg.dataDir;
+      createHome = true;
+      group = "opensearch-dashboards";
+    };
+    users.groups.opensearch-dashboards = {};
   };
 }
