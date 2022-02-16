@@ -6,8 +6,6 @@ self: super: {
 
   kustomize-static = super.callPackage ./kustomize {};
 
-  neovim-nightly = super.callPackage ./neovim-nightly.nix {};
-
   branchctl = self.callPackage "${branchCtlRepo}/nix/branchctl.nix" {};
 
   branchctlPlugins = {
