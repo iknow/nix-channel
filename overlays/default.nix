@@ -1,16 +1,6 @@
-let
-  branchCtlRepo = fetchGit { url = "git@github.com:iknow/branchctl"; ref = "master"; };
-in
-self: super: {
-  phraseapp_updater = super.callPackage ./phraseapp_updater {};
+# Convenience overlay for non-flake systems
+#
+# Systems using flakes should use the "overlay" flake output, which is
+# this composition but with a flake input instead of "fetchGit".
 
-  kustomize-static = super.callPackage ./kustomize {};
-
-  neovim-nightly = super.callPackage ./neovim-nightly.nix {};
-
-  branchctl = self.callPackage "${branchCtlRepo}/nix/branchctl.nix" {};
-
-  branchctlPlugins = {
-    branchctl-secret-gpg = self.callPackage "${branchCtlRepo}/plugins/branchctl-secret-gpg" {};
-  };
-}
+final: prev: prev.lib.composeExtensions (import ./branchctl.nix) (import ./iknow.nix) final prev
