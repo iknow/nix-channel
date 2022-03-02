@@ -1,4 +1,7 @@
 { config, lib, pkgs, ... }:
 {
-  # placeholder
+  imports = [
+    ./opensearch-dashboards.nix
+    ./opensearch.nix
+  ];
 }
