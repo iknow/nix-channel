@@ -25,6 +25,19 @@
       imports = [ ./darwin-modules/all-modules.nix ];
       nixpkgs.overlays = [ overlay ];
     };
+
+    templates = {
+      simple-shell = {
+        description = "Simple shell";
+        path = ./templates/simple-shell;
+      };
+
+      ci = {
+        description = "CI Example";
+        path = ./templates/ci;
+      };
+    };
+
   } // flake-utils.lib.eachSystem supportedSystems (system:
     let pkgs = nixpkgs.legacyPackages.${system}.extend overlay; in
     rec {
