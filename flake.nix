@@ -31,7 +31,6 @@
       packages = flake-utils.lib.flattenTree {
         inherit (pkgs)
           phraseapp_updater
-          kustomize-static
           branchctl
           branchctlPlugins
           ;
