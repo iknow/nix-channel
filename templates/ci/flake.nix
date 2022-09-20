@@ -22,16 +22,60 @@
 
         pkgs = nixpkgs.legacyPackages.${system};
         selfPackages = self.packages.${system};
+
+        accounts = {
+          users.deploy = {
+            uid = 999;
+            group = "deploy";
+            home = "/home/deploy";
+            shell = "/bin/sh";
+          };
+          groups.deploy.gid = 999;
+        };
+
+        baseLayer = {
+          name = "base-layer";
+          path = [ pkgs.busybox ];
+          entries = oci.makeFilesystem {
+            inherit accounts;
+            hosts = true;
+            tmp = true;
+            usrBinEnv = "${pkgs.busybox}/bin/env";
+            binSh = "${pkgs.busybox}/bin/sh";
+          };
+        };
+
+        testImage = oci.makeSimpleImage {
+          name = "base-test";
+          config = {
+            User = "deploy";
+            WorkingDir = "/home/deploy";
+          };
+          layers = [ baseLayer ];
+        };
       in
       {
         dockerImages.hello.production = oci.makeSimpleImage {
           name = "hello";
           config = {
+            User = "deploy";
+            WorkingDir = "/home/deploy";
             Entrypoint = ["${selfPackages.default}/bin/hello"];
           };
+          layers = [ baseLayer ];
         };
 
-        testConfigurations = {};
+        testConfigurations.hello = {
+          useHostStore = true;
+          image = testImage;
+          command = [(pkgs.writeScript "test.sh" ''
+            #!${pkgs.runtimeShell}
+
+            set -e
+
+            ${selfPackages.default}/bin/hello
+          '')];
+        };
       }
     );
 }
