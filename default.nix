@@ -6,7 +6,6 @@ in
 {
   inherit (packagesWithOverlay)
     phraseapp_updater
-    kustomize-static
     branchctl
     ;
 }
