@@ -1,0 +1,132 @@
+diff --git a/packages/plugin-essentials/sources/dedupeUtils.ts b/packages/plugin-essentials/sources/dedupeUtils.ts
+index ec168dd..bcf2845 100644
+--- a/packages/plugin-essentials/sources/dedupeUtils.ts
++++ b/packages/plugin-essentials/sources/dedupeUtils.ts
+@@ -22,6 +22,14 @@ export enum Strategy {
+    * - dependencies are never downgraded
+    */
+   HIGHEST = `highest`,
++
++  /**
++   * This strategy dedupes a locator to a version that fits a range specified
++   * directly in package.json. Otherwise, it's the same as highest.
++   *
++   * This means that transitive dependencies may be downgraded.
++   */
++  DIRECT = `direct`,
+ }
+ 
+ export const acceptedStrategies = new Set(Object.values(Strategy));
+@@ -80,6 +88,112 @@ const DEDUPE_ALGORITHMS: Record<Strategy, Algorithm> = {
+ 
+       const updatedResolution = bestCandidate.locatorHash;
+ 
++      const updatedPackage = project.originalPackages.get(updatedResolution);
++      if (typeof updatedPackage === `undefined`)
++        throw new Error(`Assertion failed: The package (${updatedResolution}) should have been registered`);
++
++      if (updatedResolution === currentResolution)
++        return null;
++
++      return {descriptor, currentPackage, updatedPackage};
++    });
++  },
++  direct: async (project, patterns, {resolver, fetcher, resolveOptions, fetchOptions}) => {
++    const locatorsByIdent = new Map<IdentHash, Set<LocatorHash>>();
++    for (const [descriptorHash, locatorHash] of project.storedResolutions) {
++      const descriptor = project.storedDescriptors.get(descriptorHash);
++      if (typeof descriptor === `undefined`)
++        throw new Error(`Assertion failed: The descriptor (${descriptorHash}) should have been registered`);
++
++      miscUtils.getSetWithDefault(locatorsByIdent, descriptor.identHash).add(locatorHash);
++    }
++
++    // resolve the "best" candidate for direct dependencies (ones in package.json)
++    const directLocatorsByIdent = new Map<IdentHash, Set<LocatorHash>>();
++    for (const workspace of project.workspaces) {
++      const addIdents = async (deps: Map<IdentHash, Descriptor>) => {
++        for (const descriptor of deps.values()) {
++          const locators = locatorsByIdent.get(descriptor.identHash);
++          if (typeof locators === `undefined`)
++            throw new Error(`Assertion failed: The resolutions (${descriptor.identHash}) should have been registered`);
++
++          const references = [...locators].map(locatorHash => {
++            const pkg = project.originalPackages.get(locatorHash);
++            if (typeof pkg === `undefined`)
++              throw new Error(`Assertion failed: The package (${locatorHash}) should have been registered`);
++
++            return pkg.reference;
++          });
++
++          const candidates = await resolver.getSatisfying(descriptor, references, resolveOptions);
++
++          const bestCandidate = candidates?.[0];
++          if (typeof bestCandidate === `undefined`)
++            continue;
++
++          miscUtils.getSetWithDefault(directLocatorsByIdent, descriptor.identHash).add(bestCandidate.locatorHash);
++        }
++      };
++
++      await addIdents(workspace.manifest.dependencies);
++      await addIdents(workspace.manifest.devDependencies);
++    }
++
++    return Array.from(project.storedDescriptors.values(), async descriptor => {
++      if (patterns.length && !micromatch.isMatch(structUtils.stringifyIdent(descriptor), patterns))
++        return null;
++
++      const currentResolution = project.storedResolutions.get(descriptor.descriptorHash);
++      if (typeof currentResolution === `undefined`)
++        throw new Error(`Assertion failed: The resolution (${descriptor.descriptorHash}) should have been registered`);
++
++      // We only care about resolutions that are stored in the lockfile
++      // (we shouldn't accidentally try deduping virtual packages)
++      const currentPackage = project.originalPackages.get(currentResolution);
++      if (typeof currentPackage === `undefined`)
++        return null;
++
++      // No need to try deduping packages that are not persisted,
++      // they will be resolved again anyways
++      if (!resolver.shouldPersistResolution(currentPackage, resolveOptions))
++        return null;
++
++      const locators = locatorsByIdent.get(descriptor.identHash);
++      if (typeof locators === `undefined`)
++        throw new Error(`Assertion failed: The resolutions (${descriptor.identHash}) should have been registered`);
++
++      // No need to choose when there's only one possibility
++      if (locators.size === 1)
++        return null;
++
++      const references = [...locators].map(locatorHash => {
++        const pkg = project.originalPackages.get(locatorHash);
++        if (typeof pkg === `undefined`)
++          throw new Error(`Assertion failed: The package (${locatorHash}) should have been registered`);
++
++        return pkg.reference;
++      });
++
++      let candidates = await resolver.getSatisfying(descriptor, references, resolveOptions);
++
++      const directLocators = directLocatorsByIdent.get(descriptor.identHash);
++
++      // If this ident is of a direct dependency, use only the candidates those
++      // direct dependencies will use. If this results in no candidates, use
++      // all candidates.
++      if (typeof directLocators !== `undefined` && candidates !== null) {
++        const filteredCandidates = candidates.filter(locator => directLocators.has(locator.locatorHash));
++        if (filteredCandidates.length > 0) {
++          candidates = filteredCandidates;
++        }
++      }
++
++      const bestCandidate = candidates?.[0];
++      if (typeof bestCandidate === `undefined`)
++        return null;
++
++      const updatedResolution = bestCandidate.locatorHash;
++
+       const updatedPackage = project.originalPackages.get(updatedResolution);
+       if (typeof updatedPackage === `undefined`)
+         throw new Error(`Assertion failed: The package (${updatedResolution}) should have been registered`);
