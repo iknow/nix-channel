@@ -4,8 +4,8 @@ let
   berry2nix-src = fetchFromGitHub {
     owner = "iknow";
     repo = "berry2nix";
-    rev = "b3a385b3f0ca96f88c6ce3ecdfece599cc67a4f4";
-    sha256 = "sha256-iN2VBHslGBNAWv2NwDeLx9TfvvJ/HFGtS9jVSwgGiSA=";
+    rev = "51129dab790cb832e8ab9dd34b6cd5a52d80514d";
+    sha256 = "sha256-amYnoqtmChi2O4GJv6Fqx+XIh8xIEpMbGy5sEMAmrcQ=";
   };
 
   inherit (callPackage (berry2nix-src + "/yarn") {}) yarn-patched;
@@ -29,9 +29,11 @@ in
   berry2nix = callPackage (berry2nix-src + "/lib.nix") {};
 
   yarn-iknow = yarn-patched.override {
-    patches = [
-      ./direct-dedupe.patch
-    ];
+    yarn-js = yarn-patched.yarn-js.override {
+      patches = [
+        ./direct-dedupe.patch
+      ];
+    };
     plugins = [
       yarn-plugin-workspace-tools
       yarn-plugin-outdated
