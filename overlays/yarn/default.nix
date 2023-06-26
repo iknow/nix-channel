@@ -21,8 +21,8 @@ let
   };
 
   yarn-plugin-iknow = fetchurl {
-    url = "https://raw.githubusercontent.com/iknow/yarn-plugin-iknow/86d51659731c79452c6a1c5b54322f1a64758c2d/bundles/@yarnpkg/plugin-iknow.js";
-    sha256 = "sha256-eZzk6utiBZZ2+RBfxHiGAzSkSZq9h0BEECHVDl/8LIM=";
+    url = "https://raw.githubusercontent.com/iknow/yarn-plugin-iknow/5c1259558540ac48ccfcbf2bd7a7a30bd442eee3/bundles/@yarnpkg/plugin-iknow.js";
+    sha256 = "sha256-sxLsPZE444Wl2HPcvSOobZioYH6Vo8aj/rwUyC8mW6Y=";
   };
 in
 {
