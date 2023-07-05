@@ -83,10 +83,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07vnk6bb54k4yc06xnwck7php50l09vvlw1ga8wdz0pia461zpzb";
+      sha256 = "0jcc512l38c0c163ni3jgskvq1vc3mr8ly5pvjijzwvfml9lf597";
       type = "gem";
     };
-    version = "1.22.1";
+    version = "1.23.0";
   };
   phrase = {
     dependencies = ["json" "link-header-parser" "typhoeus"];
@@ -94,10 +94,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1x4q71w4z0s3acg6glvs7bbd9p4nf0r5ida9aa9pc4gkmvwbdxrf";
+      sha256 = "0wfs5dk0kbwfvp6sl95vb0i5idk9gacn224p033wli91ml6jvlx1";
       type = "gem";
     };
-    version = "2.8.3";
+    version = "2.8.7";
   };
   phraseapp_updater = {
     dependencies = ["deep_merge" "hashdiff" "multi_json" "oj" "parallel" "phrase" "thor"];
@@ -105,10 +105,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04fcsnqgmlxnisvn1jcv9zrc62s02gv5g1fw11iqvv02hlfh2pdr";
+      sha256 = "1mw7iw3xrw77pfhny83m038q94203khs4hrprprsbmwbjglchn45";
       type = "gem";
     };
-    version = "3.0.0";
+    version = "3.1.0";
   };
   thor = {
     source = {
