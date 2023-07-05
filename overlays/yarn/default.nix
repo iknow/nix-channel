@@ -15,6 +15,16 @@ let
     sha256 = "sha256-hgBbcQ3fvrQP8bqAGsMLYcYM/WhyrBMQMUNVJY3dCxE=";
   };
 
+  yarn-plugin-interactive-tools = fetchurl {
+    url = "https://repo.yarnpkg.com/${yarn-patched.version}/packages/plugin-interactive-tools/bin/@yarnpkg/plugin-interactive-tools.js";
+    sha256 = "sha256-coBeeoPdV3Y/FwerT6bb1TkaYPgnH8M/tVps0qVbEUM=";
+  };
+
+  yarn-plugin-version = fetchurl {
+    url = "https://repo.yarnpkg.com/${yarn-patched.version}/packages/plugin-version/bin/@yarnpkg/plugin-version.js";
+    sha256 = "sha256-JXucgc21umG5L1ok6nu5i5g6uKPlAKRfl318Dav57t4=";
+  };
+
   yarn-plugin-outdated = fetchurl {
     url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v3.2.4/bundles/@yarnpkg/plugin-outdated.js";
     sha256 = "sha256-lB3TaXrcmPKr8sUfHjVMMP6WQoGyQFeNy5HXlUIOWfY=";
@@ -36,6 +46,8 @@ in
     };
     plugins = [
       yarn-plugin-workspace-tools
+      yarn-plugin-interactive-tools
+      yarn-plugin-version
       yarn-plugin-outdated
       yarn-plugin-iknow
     ];
