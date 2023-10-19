@@ -12,6 +12,7 @@ let
 
   hashes = {
     "https://plugins.dprint.dev/typescript-0.85.0.wasm" = "sha256-FMMoXkWL7oTZYCbh108dJtziUKgvvGH6FwK/cglUGLo=";
+    "https://plugins.dprint.dev/typescript-0.88.1.wasm" = "sha256-6ihMZIWi9GyNy1ePipVv+LUn0h/khSNuNzPzqhEL7/8=";
   };
 
   prefetchPlugin = url: fetchurl {
