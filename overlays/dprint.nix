@@ -14,6 +14,7 @@ let
     "https://plugins.dprint.dev/typescript-0.85.0.wasm" = "sha256-FMMoXkWL7oTZYCbh108dJtziUKgvvGH6FwK/cglUGLo=";
     "https://plugins.dprint.dev/typescript-0.88.1.wasm" = "sha256-6ihMZIWi9GyNy1ePipVv+LUn0h/khSNuNzPzqhEL7/8=";
     "https://plugins.dprint.dev/typescript-0.88.9.wasm" = "sha256-kZoRSCd5SozS8D2P/EYtyTzVfOdbZVDGsbzebu9InHI=";
+    "https://plugins.dprint.dev/typescript-0.93.0.wasm" = "sha256-wq6A+Dk6bGN9bLGnEFONLnFRSEnhbAu2TOJGFZHtEn8=";
   };
 
   prefetchPlugin = url: fetchurl {
