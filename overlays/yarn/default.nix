@@ -4,30 +4,15 @@ let
   berry2nix-src = fetchFromGitHub {
     owner = "iknow";
     repo = "berry2nix";
-    rev = "51129dab790cb832e8ab9dd34b6cd5a52d80514d";
-    sha256 = "sha256-amYnoqtmChi2O4GJv6Fqx+XIh8xIEpMbGy5sEMAmrcQ=";
+    rev = "83d3057e65cfdca1bb67ff14df983279e2dfbdaf";
+    sha256 = "sha256-DsuCKJbPEQLpPJgS1AfDZe46GwAS2NFhHNhPBQjU4Os=";
   };
 
   inherit (callPackage (berry2nix-src + "/yarn") {}) yarn-patched;
 
-  yarn-plugin-workspace-tools = fetchurl {
-    url = "https://repo.yarnpkg.com/${yarn-patched.version}/packages/plugin-workspace-tools/bin/@yarnpkg/plugin-workspace-tools.js";
-    sha256 = "sha256-hgBbcQ3fvrQP8bqAGsMLYcYM/WhyrBMQMUNVJY3dCxE=";
-  };
-
-  yarn-plugin-interactive-tools = fetchurl {
-    url = "https://repo.yarnpkg.com/${yarn-patched.version}/packages/plugin-interactive-tools/bin/@yarnpkg/plugin-interactive-tools.js";
-    sha256 = "sha256-coBeeoPdV3Y/FwerT6bb1TkaYPgnH8M/tVps0qVbEUM=";
-  };
-
-  yarn-plugin-version = fetchurl {
-    url = "https://repo.yarnpkg.com/${yarn-patched.version}/packages/plugin-version/bin/@yarnpkg/plugin-version.js";
-    sha256 = "sha256-JXucgc21umG5L1ok6nu5i5g6uKPlAKRfl318Dav57t4=";
-  };
-
   yarn-plugin-outdated = fetchurl {
-    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v3.2.4/bundles/@yarnpkg/plugin-outdated.js";
-    sha256 = "sha256-lB3TaXrcmPKr8sUfHjVMMP6WQoGyQFeNy5HXlUIOWfY=";
+    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v4.0.1/bundles/@yarnpkg/plugin-outdated.js";
+    sha256 = "sha256-6cARNfm2Gyr3GrL4zpYnEa2GTm96t7tO3PjAAIOnvEo=";
   };
 
   yarn-plugin-iknow = fetchurl {
@@ -45,9 +30,6 @@ in
       ];
     };
     plugins = [
-      yarn-plugin-workspace-tools
-      yarn-plugin-interactive-tools
-      yarn-plugin-version
       yarn-plugin-outdated
       yarn-plugin-iknow
     ];
