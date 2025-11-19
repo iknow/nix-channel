@@ -4,8 +4,8 @@ let
   berry2nix-src = fetchFromGitHub {
     owner = "iknow";
     repo = "berry2nix";
-    rev = "83d3057e65cfdca1bb67ff14df983279e2dfbdaf";
-    sha256 = "sha256-DsuCKJbPEQLpPJgS1AfDZe46GwAS2NFhHNhPBQjU4Os=";
+    rev = "c7f12e9cfd61fd62a64cd4ec933de8ebd6bc769a";
+    sha256 = "sha256-QrveEvBfL4N5H97oMVLfi5U//egz8dIHZhQMtgn1qlk=";
   };
 
   inherit (callPackage (berry2nix-src + "/yarn") {}) yarn-patched;
