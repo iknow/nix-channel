@@ -4,15 +4,15 @@ let
   berry2nix-src = fetchFromGitHub {
     owner = "iknow";
     repo = "berry2nix";
-    rev = "c7f12e9cfd61fd62a64cd4ec933de8ebd6bc769a";
-    sha256 = "sha256-QrveEvBfL4N5H97oMVLfi5U//egz8dIHZhQMtgn1qlk=";
+    rev = "51e03af8431c1e773d2a23fb491fb6169c8786b8";
+    sha256 = "sha256-rrtbGO+8mmaTWpt+E8rjSmvgIFW1ohM8gQUkcgJTQL0=";
   };
 
   inherit (callPackage (berry2nix-src + "/yarn") {}) yarn-patched;
 
   yarn-plugin-outdated = fetchurl {
-    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v4.0.1/bundles/@yarnpkg/plugin-outdated.js";
-    sha256 = "sha256-6cARNfm2Gyr3GrL4zpYnEa2GTm96t7tO3PjAAIOnvEo=";
+    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v4.0.2/bundles/@yarnpkg/plugin-outdated.js";
+    sha256 = "sha256-PhGIXf0ylYLZ4kMNhqGHhk85hH5iA+JjEv14tHSgDK4=";
   };
 
   yarn-plugin-iknow = fetchurl {
