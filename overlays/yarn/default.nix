@@ -11,8 +11,8 @@ let
   inherit (callPackage (berry2nix-src + "/yarn") {}) yarn-patched;
 
   yarn-plugin-outdated = fetchurl {
-    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v4.0.1/bundles/@yarnpkg/plugin-outdated.js";
-    sha256 = "sha256-6cARNfm2Gyr3GrL4zpYnEa2GTm96t7tO3PjAAIOnvEo=";
+    url = "https://raw.githubusercontent.com/mskelton/yarn-plugin-outdated/v4.0.2/bundles/@yarnpkg/plugin-outdated.js";
+    sha256 = "sha256-PhGIXf0ylYLZ4kMNhqGHhk85hH5iA+JjEv14tHSgDK4=";
   };
 
   yarn-plugin-iknow = fetchurl {
